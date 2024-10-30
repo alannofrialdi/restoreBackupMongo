@@ -43,7 +43,7 @@ async function restoreMongoDB() {
   const port = process.env.DB_PORT || 27017;
 
   // ? atur kondisi sesuai dengan backup, jika menggunakan --archive maka true
-  const archive = true;
+  const archive = false;
 
   try {
     if (archive) {
@@ -61,7 +61,7 @@ async function restoreMongoDB() {
         }
 
         console.log(
-          `Restore berhasil! Database ${dbName} telah direstore dari ${backupZip}`,
+          `Restore berhasil! Database ${dbName} telah direstore dari ${backupZip}`
         );
         console.log(`Command: ${command}`);
       });
@@ -85,16 +85,17 @@ async function restoreMongoDB() {
       const extractedFolders = fs
         .readdirSync(extractDir)
         .filter((file) =>
-          fs.statSync(path.join(extractDir, file)).isDirectory(),
+          fs.statSync(path.join(extractDir, file)).isDirectory()
         );
 
       if (extractedFolders.length === 0) {
         throw new Error(
-          "tidak ada folder yang ditemukan di dalam backup yang diekstrak.",
+          "tidak ada folder yang ditemukan di dalam backup yang diekstrak."
         );
       }
 
-      const extractedFolder = path.join(extractDir, extractedFolders[0]);
+      // ? ubah extractedFolders[0] jika di windows
+      const extractedFolder = path.join(extractDir, extractedFolders[1]);
       console.log(`Folder yang diekstrak: ${extractedFolder}`);
 
       // ? ekstrak semua file
